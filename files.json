@@ -1,0 +1,44 @@
+{
+    "АИТ": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/ait_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/ait_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/ait_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/ait_4.xlsx",
+        "5 курс": "https://rasp.pgups.ru/files/b/2024/ait_5.xlsx"
+    },
+    "ПГС": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/pgs_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/pgs_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/pgs_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/pgs_4.xlsx",
+        "5 курс": "https://rasp.pgups.ru/files/b/2024/pgs_5.xlsx",
+        "6 курс": "https://rasp.pgups.ru/files/b/2024/pgs_6.xlsx"
+    },
+    "ТС": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/ts_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/ts_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/ts_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/ts_4.xlsx",
+        "5 курс": "https://rasp.pgups.ru/files/b/2024/ts_5.xlsx"
+    },
+    "ТЭС": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/tes_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/tes_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/tes_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/tes_4.xlsx",
+        "5 курс": "https://rasp.pgups.ru/files/b/2024/tes_5.xlsx"
+    },
+    "ЭиМ": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/eim_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/eim_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/eim_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/eim_4.xlsx"
+    },
+    "УПЛ": {
+        "1 курс": "https://rasp.pgups.ru/files/b/2024/upl_1.xlsx",
+        "2 курс": "https://rasp.pgups.ru/files/b/2024/upl_2.xlsx",
+        "3 курс": "https://rasp.pgups.ru/files/b/2024/upl_3.xlsx",
+        "4 курс": "https://rasp.pgups.ru/files/b/2024/upl_4.xlsx",
+        "5 курс": "https://rasp.pgups.ru/files/b/2024/upl_5.xlsx"
+    }
+}
