@@ -1,10 +1,13 @@
 import json
+from numpy import less, tri
 import openpyxl.cell
 import requests
 from importlib import reload
+import time
 
 import openpyxl
 from openpyxl import load_workbook
+from sympy import false
 import config
 
 def trim(string: str) -> str:
@@ -21,23 +24,30 @@ def update(group: str, course: str, debug: bool = false):
 
     response = requests.get(url, stream=True)
 
-    print(f'\n{group} ({course})')
+    print(f'\n{group} ({course})')  if debug else ...
     with open("temp/table.xlsx", "wb") as handle:
         for data in response.iter_content():
             handle.write(data)
 
     result = {}
     book = load_workbook('./temp/table.xlsx', data_only = True).active
+    
+    usedfrom = 0
+    for i in range(1,30):
+        try: d = book[f'A{i}'].value.replace(' ','')# type: ignore
+        except: continue
+        if d == 'ПОНЕДЕЛЬНИК':
+            usedfrom = i-1
+            print(f'\n\n\n{usedfrom=}\n\n')
+            time.sleep(1)
+            break
+        
+    
     for c in 'CDEFGHIJKLMNOPQRSTUVWXYZ':
-        usedfrom = 8
         try: 
-            typename = book[f'{c}8'].value.replace(' ','') # type: ignore
+            typename = book[f'{c}{usedfrom}'].value.replace(' ','') # type: ignore
             if not typename: raise Exception
-
-        except: 
-            usedfrom = 9
-            try: typename = book[f'{c}9'].value.replace(' ','') # type: ignore
-            except: continue
+        except: continue
         if not typename: continue
         # if c != 'D': continue #test
         
@@ -51,12 +61,13 @@ def update(group: str, course: str, debug: bool = false):
         this = {}
 
         for r in range(usedfrom+1, 99):
+            time.sleep(.01)
             day = book[f'A{r}'].value # type: ignore
             if day: day = day.capitalize()
             delta = book[f'B{r}'].value # type: ignore
             lesson = book[f'{c}{r}'].value # type: ignore
 
-            print(day, delta, lesson, f'l_col:{c} row:{r}')
+            print(day, delta, lesson, f'l_col:{c} row:{r}')  if debug else ...
             
             if day == 'Суббота': break
 
@@ -71,7 +82,7 @@ def update(group: str, course: str, debug: bool = false):
 
             print(f'{c}{r}', day, delta, 'Lesson text...' if lesson else 'None', book[f'{c}{r}']) if debug else ...  # type: ignore
             
-            if day or delta or (lesson) or (not lesson and type(book[f'{c}{r}']) != openpyxl.cell.MergedCell): # type: ignore
+            if day or delta or (lesson and trim(lesson) != '') or (not lesson and type(book[f'{c}{r}']) != openpyxl.cell.MergedCell): # type: ignore
                 if day and day != last_day:
                     last_day = day
                     this[last_day] = {}
@@ -80,9 +91,9 @@ def update(group: str, course: str, debug: bool = false):
                     last_delta = delta
                     this[last_day][last_delta] = []
                 
-                if lesson and lesson != last_lesson:
+                if lesson and trim(lesson) and lesson != last_lesson:
                     last_lesson = lesson
-                    d = filter(lambda _: _!='', lesson.replace('\n', '      ').split('   '))
+                    d = filter(lambda _: _!='', lesson.replace(',', '').replace('\n', '      ').split('   '))
                     lesson = []
                     for _ in d: lesson.append(trim(_))
                     lessonOBJ = {'type': '', 'name': '', 'info': [], 'raw': lesson, 'ok': True}
@@ -98,10 +109,7 @@ def update(group: str, course: str, debug: bool = false):
                         this[last_day][last_delta].append(lessonOBJ)
                         continue
 
-                    addInfo = '  '.join(lesson[2:]).replace('  ', '$')
-                    if len(lesson[1].split('  ')) > 1:
-                        addInfo = '  '.join(lesson[1].split('  ')[1:]).replace('  ', '$') + '$$' + addInfo 
-                    for info in addInfo.split('$'):
+                    for info in lesson[2:]:
                         if info == '' or info == ' ': continue
                         lessonOBJ['info'].append(trim(info))
                     this[last_day][last_delta].append(lessonOBJ)
@@ -112,15 +120,23 @@ def update(group: str, course: str, debug: bool = false):
         result[typename] = this
     print(f'└──── Downloaded \n') if debug else ...
     json.dump(result, open(f'./timetables/{group} {course}.json'.replace(' ','_'), 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
+    return result
 
 
-
-def updateAll(debug: bool = false): 
+def updateAll(debug: bool = false) -> str: 
     global config
     config = reload(config)
+    
+    output = 'Result:'
 
     for group, courses in config.LOAD.items():
+        output += f'\n* {group}: '
         for course in courses:
-            update(group, course, debug)
+            try: r = update(group, course, debug)
+            except Exception as e: 
+                print(f'{group} > {course}: {e}') if debug else ...
+                r = False
+            output += f'{course} ' if r else f'[{course}] '
 
+    return output
 # updateAll()
